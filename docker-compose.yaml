@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - shopnet
+
+  product-service:
+    build: ./product-service
+    container_name: product-service
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+    networks:
+      - shopnet
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+    networks:
+      - shopnet
+
+  db:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      - POSTGRES_DB=shopdb
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - shopnet
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongo-db
+    ports:
+      - "27017:27017"
+    networks:
+      - shopnet
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - shopnet
+
+networks:
+  shopnet:
+    driver: bridge

@@ -1,0 +1,31 @@
+<!-- product-service/templates/products.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    <ul id="product-list">
+        <!-- Product items will be populated here -->
+    </ul>
+
+    <script>
+        // You can add JavaScript here to fetch products from the server and display them
+        fetch('/products')
+            .then(response => response.json())
+            .then(products => {
+                const productList = document.getElementById('product-list');
+                products.forEach(product => {
+                    const li = document.createElement('li');
+                    li.textContent = `${product.name} - $${product.price}`;
+                    productList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching products:', error));
+    </script>
+</body>
+</html>
